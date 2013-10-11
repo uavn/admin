@@ -1,0 +1,14 @@
+{
+    "name": "uavn/dictator",
+    "description": "The best PHP 5.3 Admin Generator in the galaxy",
+    "license": "GNU GPLv3",
+    "authors": [
+        {
+            "name": "Artem",
+            "email": "artbonvic@gmail.com"
+        }
+    ],
+    "require": {
+
+    }
+}

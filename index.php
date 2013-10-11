@@ -26,7 +26,7 @@ $dictator
     'Saved successful' => 'Успешно сохранено',
     'ipp' => 5
   ))
-
+// sadas
   ->setTable('book', 'Книги')
 
   ->addField('id', 'ID')
