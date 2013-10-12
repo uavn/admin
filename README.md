@@ -22,7 +22,7 @@ New (edit) row page:
 Code example:
 
     // Require lib
-    require_once 'src/Dictator.php';
+    require_once 'src/Uavn/Dictator.php';
     
     // Create PDO connection or use your project connection
     $pdo = new \PDO(
