@@ -1,6 +1,6 @@
 <?php
 date_default_timezone_set('Europe/Kiev');
-require_once 'src/Dictator.php';
+require_once 'src/Uavn/Dictator.php';
 
 $pdo = new \PDO(
   'mysql:host=localhost;dbname=dictator',
