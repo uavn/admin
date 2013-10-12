@@ -22,7 +22,7 @@ New (edit) row page:
 Code example:
 
     // Require lib
-    require_once 'dictator.php';
+    require_once 'src/Dictator.php';
     
     // Create PDO connection or use your project connection
     $pdo = new \PDO(
@@ -33,7 +33,7 @@ Code example:
     );
     
     // Create instance of Dictator
-    $dictator = new \Dictator;
+    $dictator = new \Uavn\Dictator;
     $dictator
       ->setConnection($pdo)
       // Set options: ipp — items per page, others — translations.
