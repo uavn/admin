@@ -10,6 +10,7 @@ Dictator — open source admin generator for any PHP 5.3 project.
 * All types of relations (one-to-one, one-to-many, many-to-many);
 * Upload files and images;
 * Search by fields;
+* Sort by fields;
 * Theming.
 
 List page:
