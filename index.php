@@ -1,5 +1,5 @@
 <?php
-require_once 'dictator.php';
+require_once 'src/dictator.php';
 
 $pdo = new \PDO(
   'mysql:host=localhost;dbname=dictator',
@@ -26,7 +26,7 @@ $dictator
     'Saved successful' => 'Успешно сохранено',
     'ipp' => 5
   ))
-// sadas
+
   ->setTable('book', 'Книги')
 
   ->addField('id', 'ID')
