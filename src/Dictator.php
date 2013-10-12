@@ -1,4 +1,5 @@
 <?php
+namespace Uavn;
 
 class Dictator {
   private $conn = null;

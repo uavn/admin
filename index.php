@@ -1,5 +1,6 @@
 <?php
-require_once 'src/dictator.php';
+date_default_timezone_set('Europe/Kiev');
+require_once 'src/Dictator.php';
 
 $pdo = new \PDO(
   'mysql:host=localhost;dbname=dictator',
@@ -8,7 +9,7 @@ $pdo = new \PDO(
   )
 );
 
-$dictator = new \Dictator;
+$dictator = new \Uavn\Dictator;
 $dictator
   ->setConnection($pdo)
   
