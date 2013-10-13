@@ -191,7 +191,7 @@ class Dictator {
       die;
     }
 
-    $data = new stdClass;
+    $data = new \stdClass;
     if ( $id ) {
       $sql = "SELECT * FROM `{$this->table}` WHERE `id` = :id";
 
