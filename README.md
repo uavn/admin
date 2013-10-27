@@ -84,11 +84,18 @@ Code example:
     
         return '—';
       })
-      ->addFilter('date', function( $text ) {
+      ->addFilter('createdAt', function( $text ) {
         if ( $text ) {
           return date( 'd.m.Y (H:i:s)', strtotime($text) );
         }
-    
+
+        return '—';
+      })
+      ->addFilter('updatedAt', function( $text ) {
+        if ( $text ) {
+          return date( 'd.m.Y (H:i:s)', strtotime($text) );
+        }
+
         return '—';
       })
       // This field will generate input type="file" on edit page, second param — upload dir
