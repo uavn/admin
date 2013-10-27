@@ -8,6 +8,7 @@ class Dictator {
   private $fields = array();
   private $filters = array();
   private $fileFilelds = array();
+  private $checkFilelds = array();
   private $textFilelds = array();
   private $relations = array();
   private $manyRelations = array();
@@ -48,6 +49,12 @@ class Dictator {
 
   public function addFileWidget( $name, $uploadPath ) {
     $this->fileFilelds[$name] = $uploadPath;
+
+    return $this;
+  }
+
+  public function addCheckWidget( $name ) {
+    $this->checkFilelds[$name] = $name;
 
     return $this;
   }
@@ -248,6 +255,10 @@ class Dictator {
           $form .= '<label for="dictatodl' . $name . '">Удалить изображение (' . $value . ')</label> ';
         }
 
+      } elseif ( isset($this->checkFilelds[$name]) ) {
+        $form .= '<label for="dictatod' . $name . '">';
+        $form .= '<input type="checkbox" ' . ( $value ? 'checked="checked"' : '' ) . ' name="item[' . $name . ']" value="1" id="dictatod' . $name . '"/>';
+        $form .= ($title . '</label><br/>');
       } elseif ( isset($this->textFilelds[$name]) ) {
         $form .= '<label for="dictatod' . $name . '">' . $title . ':</label><br/>' .
           '<textarea name="item[' . $name . ']" id="dictatod' . $name . '">' . $value . '</textarea>';

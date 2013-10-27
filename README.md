@@ -58,9 +58,15 @@ Code example:
       ->addField('pic', 'Обложка')
       ->addField('categoryId', 'Категория')
       ->addField('name', 'Название')
+      ->addField('isSold', 'Продана?')
       ->addField('desc', 'Описание')
       ->addField('date', 'Дата')
       // Add list filters: field name and callback function
+      ->addFilter('isSold', function( $isSold ) {
+        return $isSold
+          ? 'Да'
+          : 'Нет';
+      })
       ->addFilter('pic', function( $text ) {
         if ( $text ) {
           return '<img width="150" src="upload/' . $text . '">';
@@ -87,6 +93,8 @@ Code example:
       ->addFileWidget('pic', __DIR__ . '/upload')
       // This field will geretate textarea on edit page
       ->addTextWidget('desc')
+      // This field will geretate checkbox on edit page
+      ->addCheckWidget('isSold')
       // Field categoryId maps to table category will show category.name field in list and dropdown
       ->addRelation('categoryId', 'category', 'name')
       // This adds many-to-many widget on edit page:

@@ -35,8 +35,14 @@ $dictator
   ->addField('categoryId', 'Категория')
   ->addField('name', 'Название')
   ->addField('desc', 'Описание')
+  ->addField('isSold', 'Продана?')
   ->addField('date', 'Дата')
 
+  ->addFilter('isSold', function( $isSold ) {
+    return $isSold
+      ? 'Да'
+      : 'Нет';
+  })
   ->addFilter('pic', function( $text ) {
     if ( $text ) {
       return '<img width="150" src="upload/' . $text . '">';
@@ -63,6 +69,8 @@ $dictator
   ->addFileWidget('pic', __DIR__ . '/upload')
 
   ->addTextWidget('desc')
+
+  ->addCheckWidget('isSold')
 
   ->addRelation('categoryId', 'category', 'name')
   
