@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.32, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.34, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: dictator
 -- ------------------------------------------------------
--- Server version	5.5.32-0ubuntu7
+-- Server version	5.5.34-0ubuntu0.13.10.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -55,7 +55,7 @@ CREATE TABLE `author_book` (
   KEY `bookId` (`bookId`),
   CONSTRAINT `author_book_ibfk_1` FOREIGN KEY (`authorId`) REFERENCES `author` (`id`) ON DELETE CASCADE,
   CONSTRAINT `author_book_ibfk_2` FOREIGN KEY (`bookId`) REFERENCES `book` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,7 +64,7 @@ CREATE TABLE `author_book` (
 
 LOCK TABLES `author_book` WRITE;
 /*!40000 ALTER TABLE `author_book` DISABLE KEYS */;
-INSERT INTO `author_book` VALUES (4,1,2),(6,3,4),(12,1,1),(13,2,1),(14,3,1),(52,2,3),(61,1,20),(62,2,20),(63,2,5),(64,1,22),(65,3,22);
+INSERT INTO `author_book` VALUES (4,1,2),(6,3,4),(12,1,1),(13,2,1),(14,3,1),(52,2,3),(61,1,20),(62,2,20),(63,2,5),(66,1,22),(67,3,22);
 /*!40000 ALTER TABLE `author_book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -82,6 +82,7 @@ CREATE TABLE `book` (
   `pic` varchar(255) DEFAULT NULL,
   `desc` longtext,
   `date` datetime DEFAULT NULL,
+  `isSold` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `categoryId` (`categoryId`),
   CONSTRAINT `book_ibfk_1` FOREIGN KEY (`categoryId`) REFERENCES `category` (`id`) ON DELETE CASCADE
@@ -94,7 +95,7 @@ CREATE TABLE `book` (
 
 LOCK TABLES `book` WRITE;
 /*!40000 ALTER TABLE `book` DISABLE KEYS */;
-INSERT INTO `book` VALUES (1,'Книга 1',1,NULL,NULL,NULL),(2,'Книга 2',1,NULL,NULL,NULL),(3,'Книга 3',1,NULL,NULL,NULL),(4,'Книга 4',1,NULL,NULL,NULL),(5,'Книга 5',1,NULL,'Описание',NULL),(20,'sadasd',2,NULL,'Национальная футбольная сборная Украины сегодня сыграет с командой Польши отборочный матч к Чемпионату мира-2014. Игра состоится в Харькове на стадионе \"Металлист\" и начнется в 21:00, прямая трансляция - на телеканале Интер.\r\n\r\nДо завершения квалификации остается всего два матча, но ситуация в нашей турнирной группе остается очень запутанной. На первое место и прямую путевку в Бразилию претендуют четыре команды и как раз сегодня претенденты играют друг с другом.','2013-12-10 10:10:10'),(22,'Тест',1,'525884d671b23.jpg','Описание тест','2010-12-12 10:10:10');
+INSERT INTO `book` VALUES (1,'Книга 1',1,NULL,NULL,NULL,NULL),(2,'Книга 2',1,NULL,NULL,NULL,NULL),(3,'Книга 3',1,NULL,NULL,NULL,NULL),(4,'Книга 4',1,NULL,NULL,NULL,NULL),(5,'Книга 5',1,NULL,'Описание',NULL,NULL),(20,'sadasd',2,NULL,'Национальная футбольная сборная Украины сегодня сыграет с командой Польши отборочный матч к Чемпионату мира-2014. Игра состоится в Харькове на стадионе \"Металлист\" и начнется в 21:00, прямая трансляция - на телеканале Интер.\r\n\r\nДо завершения квалификации остается всего два матча, но ситуация в нашей турнирной группе остается очень запутанной. На первое место и прямую путевку в Бразилию претендуют четыре команды и как раз сегодня претенденты играют друг с другом.','2013-12-10 10:10:10',NULL),(22,'Тест',1,'525884d671b23.jpg','Описание тест','2010-12-12 10:10:10',1);
 /*!40000 ALTER TABLE `book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -162,7 +163,7 @@ CREATE TABLE `publisher_book` (
   KEY `publisherId` (`publisherId`),
   CONSTRAINT `publisher_book_ibfk_1` FOREIGN KEY (`bookId`) REFERENCES `book` (`id`) ON DELETE CASCADE,
   CONSTRAINT `publisher_book_ibfk_2` FOREIGN KEY (`publisherId`) REFERENCES `publisher` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=107 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -171,7 +172,7 @@ CREATE TABLE `publisher_book` (
 
 LOCK TABLES `publisher_book` WRITE;
 /*!40000 ALTER TABLE `publisher_book` DISABLE KEYS */;
-INSERT INTO `publisher_book` VALUES (1,1,1),(2,1,3),(50,3,1),(51,3,2),(85,20,1),(86,20,2),(87,20,3),(88,5,1),(89,5,2),(90,5,3),(91,5,7),(92,5,8),(93,5,9),(94,5,10),(95,5,11),(96,5,12),(97,5,13),(98,5,14),(99,22,5),(100,22,6),(101,22,12),(102,22,13);
+INSERT INTO `publisher_book` VALUES (1,1,1),(2,1,3),(50,3,1),(51,3,2),(85,20,1),(86,20,2),(87,20,3),(88,5,1),(89,5,2),(90,5,3),(91,5,7),(92,5,8),(93,5,9),(94,5,10),(95,5,11),(96,5,12),(97,5,13),(98,5,14),(103,22,5),(104,22,6),(105,22,12),(106,22,13);
 /*!40000 ALTER TABLE `publisher_book` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -184,4 +185,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-10-12  2:15:06
+-- Dump completed on 2013-10-27 18:36:47
