@@ -257,6 +257,7 @@ class Dictator {
 
       } elseif ( isset($this->checkFilelds[$name]) ) {
         $form .= '<label for="dictatod' . $name . '">';
+        $form .= '<input type="hidden" name="item[' . $name . ']" value="0"/>';
         $form .= '<input type="checkbox" ' . ( $value ? 'checked="checked"' : '' ) . ' name="item[' . $name . ']" value="1" id="dictatod' . $name . '"/>';
         $form .= ($title . '</label><br/>');
       } elseif ( isset($this->textFilelds[$name]) ) {
