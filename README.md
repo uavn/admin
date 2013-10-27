@@ -61,7 +61,8 @@ Code example:
       ->addField('isSold', 'Продана?')
       ->addField('desc', 'Описание')
       // Third parameter — will not be showed on edit page
-      ->addField('date', 'Дата', false)
+      ->addField('createdAt', 'Создано', false)
+      ->addField('updatedAt', 'Обновлено', false)
       // Add list filters: field name and callback function
       ->addFilter('isSold', function( $isSold ) {
         return $isSold
@@ -114,11 +115,16 @@ Code example:
       // This creates search by this fields
       ->addSearch('name')
       ->addSearch('desc')
-      // On Before Save event callback
-      ->onBeforeSave('date', function( $date ) {
-        return $date
-          ? $date
-          : date('Y-m-d H:i:s');
+      // On Before Insert and Update event callbacks
+      ->onBeforeInsert('createdAt', function() {
+        return date('Y-m-d H:i:s');
+      })
+      ->onBeforeInsert('updatedAt', function() {
+        return date('Y-m-d H:i:s');
+      })
+
+      ->onBeforeUpdate('updatedAt', function( $itemData ) {
+        return date('Y-m-d H:i:s');
       })
       ;
       // This will generate table or form

@@ -12,7 +12,8 @@ class Dictator {
   private $textFilelds = array();
   private $relations = array();
   private $manyRelations = array();
-  private $beforeCallbacks = array();
+  private $beforeInserts = array();
+  private $beforeUpdates = array();
   private $noEdit = array();
   private $searchs = array();
   private $options = array(
@@ -83,8 +84,14 @@ class Dictator {
     return $this;
   }
 
-  public function onBeforeSave( $field, $function ) {
-    $this->beforeCallbacks[$field] = $function;
+  public function onBeforeInsert( $field, $function ) {
+    $this->beforeInserts[$field] = $function;
+
+    return $this;
+  }
+
+  public function onBeforeUpdate( $field, $function ) {
+    $this->beforeUpdates[$field] = $function;
 
     return $this;
   }
@@ -119,11 +126,11 @@ class Dictator {
     if ( isset($_REQUEST['save']) && $_REQUEST['save'] ) {
       $itemData = $_REQUEST['item'];
 
-      foreach ( $this->beforeCallbacks as $field => $function ) {
-        $itemData[$field] = $function($itemData[$field]);
-      }
-
       if ( $id ) {
+        foreach ( $this->beforeUpdates as $field => $function ) {
+          $itemData[$field] = $function($itemData[$field]);
+        }
+
         $sql = "UPDATE `$this->table` SET ";
 
         $params = array();
@@ -141,6 +148,10 @@ class Dictator {
         $statement = $this->conn->prepare($sql);
         $statement->execute($params);
       } else {
+        foreach ( $this->beforeInserts as $field => $function ) {
+          $itemData[$field] = $function();
+        }
+
         $sql = "INSERT INTO `$this->table` ";
 
         $keys = array();

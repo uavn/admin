@@ -37,7 +37,8 @@ $dictator
   ->addField('desc', 'Описание')
   ->addField('isSold', 'Продана?')
   // Third parameter — will not be showed on edit page
-  ->addField('date', 'Дата', false)
+  ->addField('createdAt', 'Создано', false)
+  ->addField('updatedAt', 'Обновлено', false)
 
   ->addFilter('isSold', function( $isSold ) {
     return $isSold
@@ -88,10 +89,15 @@ $dictator
   ->addSearch('name')
   ->addSearch('desc')
 
-  ->onBeforeSave('date', function( $date ) {
-    return $date
-      ? $date
-      : date('Y-m-d H:i:s');
+  ->onBeforeInsert('createdAt', function() {
+    return date('Y-m-d H:i:s');
+  })
+  ->onBeforeInsert('updatedAt', function() {
+    return date('Y-m-d H:i:s');
+  })
+
+  ->onBeforeUpdate('updatedAt', function( $itemData ) {
+    return date('Y-m-d H:i:s');
   })
   ;
 
