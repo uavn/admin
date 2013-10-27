@@ -36,7 +36,8 @@ $dictator
   ->addField('name', 'Название')
   ->addField('desc', 'Описание')
   ->addField('isSold', 'Продана?')
-  ->addField('date', 'Дата')
+  // Third parameter — will not be showed on edit page
+  ->addField('date', 'Дата', false)
 
   ->addFilter('isSold', function( $isSold ) {
     return $isSold

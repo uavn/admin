@@ -55,7 +55,7 @@ CREATE TABLE `author_book` (
   KEY `bookId` (`bookId`),
   CONSTRAINT `author_book_ibfk_1` FOREIGN KEY (`authorId`) REFERENCES `author` (`id`) ON DELETE CASCADE,
   CONSTRAINT `author_book_ibfk_2` FOREIGN KEY (`bookId`) REFERENCES `book` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,7 +64,7 @@ CREATE TABLE `author_book` (
 
 LOCK TABLES `author_book` WRITE;
 /*!40000 ALTER TABLE `author_book` DISABLE KEYS */;
-INSERT INTO `author_book` VALUES (4,1,2),(6,3,4),(52,2,3),(61,1,20),(62,2,20),(63,2,5),(77,1,1),(78,2,1),(79,3,1),(88,1,22),(89,3,22);
+INSERT INTO `author_book` VALUES (4,1,2),(52,2,3),(61,1,20),(62,2,20),(77,1,1),(78,2,1),(79,3,1),(90,1,22),(91,3,22),(92,2,5),(93,3,4);
 /*!40000 ALTER TABLE `author_book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -96,7 +96,7 @@ CREATE TABLE `book` (
 
 LOCK TABLES `book` WRITE;
 /*!40000 ALTER TABLE `book` DISABLE KEYS */;
-INSERT INTO `book` VALUES (1,'Книга 1',1,NULL,NULL,NULL,NULL,NULL),(2,'Книга 2',1,NULL,NULL,NULL,NULL,NULL),(3,'Книга 3',1,NULL,NULL,NULL,NULL,NULL),(4,'Книга 4',1,NULL,NULL,NULL,NULL,NULL),(5,'Книга 5',1,NULL,'Описание',NULL,NULL,NULL),(20,'sadasd',2,NULL,'Национальная футбольная сборная Украины сегодня сыграет с командой Польши отборочный матч к Чемпионату мира-2014. Игра состоится в Харькове на стадионе \"Металлист\" и начнется в 21:00, прямая трансляция - на телеканале Интер.\r\n\r\nДо завершения квалификации остается всего два матча, но ситуация в нашей турнирной группе остается очень запутанной. На первое место и прямую путевку в Бразилию претендуют четыре команды и как раз сегодня претенденты играют друг с другом.','2013-12-10 10:10:10',NULL,NULL),(22,'Тест',1,'525884d671b23.jpg','Описание тест','2013-10-27 19:27:09',1,NULL);
+INSERT INTO `book` VALUES (1,'Книга 1',1,NULL,NULL,NULL,NULL,NULL),(2,'Книга 2',1,NULL,NULL,NULL,NULL,NULL),(3,'Книга 3',1,NULL,NULL,NULL,NULL,NULL),(4,'Книга 4',1,NULL,NULL,'2013-10-27 19:33:28',NULL,NULL),(5,'Книга 5',1,NULL,'Описание','2013-10-27 19:33:21',NULL,NULL),(20,'sadasd',2,NULL,'Национальная футбольная сборная Украины сегодня сыграет с командой Польши отборочный матч к Чемпионату мира-2014. Игра состоится в Харькове на стадионе \"Металлист\" и начнется в 21:00, прямая трансляция - на телеканале Интер.\r\n\r\nДо завершения квалификации остается всего два матча, но ситуация в нашей турнирной группе остается очень запутанной. На первое место и прямую путевку в Бразилию претендуют четыре команды и как раз сегодня претенденты играют друг с другом.','2013-12-10 10:10:10',NULL,NULL),(22,'Тест',1,'525884d671b23.jpg','Описание тест','2013-10-27 19:29:09',1,NULL);
 /*!40000 ALTER TABLE `book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -164,7 +164,7 @@ CREATE TABLE `publisher_book` (
   KEY `publisherId` (`publisherId`),
   CONSTRAINT `publisher_book_ibfk_1` FOREIGN KEY (`bookId`) REFERENCES `book` (`id`) ON DELETE CASCADE,
   CONSTRAINT `publisher_book_ibfk_2` FOREIGN KEY (`publisherId`) REFERENCES `publisher` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=135 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=150 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -173,7 +173,7 @@ CREATE TABLE `publisher_book` (
 
 LOCK TABLES `publisher_book` WRITE;
 /*!40000 ALTER TABLE `publisher_book` DISABLE KEYS */;
-INSERT INTO `publisher_book` VALUES (50,3,1),(51,3,2),(85,20,1),(86,20,2),(87,20,3),(88,5,1),(89,5,2),(90,5,3),(91,5,7),(92,5,8),(93,5,9),(94,5,10),(95,5,11),(96,5,12),(97,5,13),(98,5,14),(113,1,1),(114,1,3),(131,22,5),(132,22,6),(133,22,12),(134,22,13);
+INSERT INTO `publisher_book` VALUES (50,3,1),(51,3,2),(85,20,1),(86,20,2),(87,20,3),(113,1,1),(114,1,3),(135,22,5),(136,22,6),(137,22,12),(138,22,13),(139,5,1),(140,5,2),(141,5,3),(142,5,7),(143,5,8),(144,5,9),(145,5,10),(146,5,11),(147,5,12),(148,5,13),(149,5,14);
 /*!40000 ALTER TABLE `publisher_book` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -186,4 +186,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-10-27 19:28:05
+-- Dump completed on 2013-10-27 19:33:44

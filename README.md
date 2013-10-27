@@ -60,7 +60,8 @@ Code example:
       ->addField('name', 'Название')
       ->addField('isSold', 'Продана?')
       ->addField('desc', 'Описание')
-      ->addField('date', 'Дата')
+      // Third parameter — will not be showed on edit page
+      ->addField('date', 'Дата', false)
       // Add list filters: field name and callback function
       ->addFilter('isSold', function( $isSold ) {
         return $isSold
@@ -113,6 +114,12 @@ Code example:
       // This creates search by this fields
       ->addSearch('name')
       ->addSearch('desc')
+      // On Before Save event callback
+      ->onBeforeSave('date', function( $date ) {
+        return $date
+          ? $date
+          : date('Y-m-d H:i:s');
+      })
       ;
       // This will generate table or form
       $html = $dictator->generate();

@@ -13,6 +13,7 @@ class Dictator {
   private $relations = array();
   private $manyRelations = array();
   private $beforeCallbacks = array();
+  private $noEdit = array();
   private $searchs = array();
   private $options = array(
     'ipp' => '10',
@@ -42,8 +43,12 @@ class Dictator {
     return $this;
   }
 
-  public function addField( $name, $title = null ) {
+  public function addField( $name, $title = null, $allowEdit = true ) {
     $this->fields[$name] = $title ?: $name;
+
+    if ( !$allowEdit ) {
+      $this->noEdit[$name] = $name;
+    }
 
     return $this;
   }
@@ -230,7 +235,7 @@ class Dictator {
 
     foreach ( $this->fields as $name => $title ) {
       // values from DB
-      if ( 'id' == $name ) {
+      if ( 'id' == $name || in_array($name, $this->noEdit) ) {
         continue;
       }
 
