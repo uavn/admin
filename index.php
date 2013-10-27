@@ -86,6 +86,12 @@ $dictator
 
   ->addSearch('name')
   ->addSearch('desc')
+
+  ->onBeforeSave('date', function( $date ) {
+    return $date
+      ? $date
+      : date('Y-m-d H:i:s');
+  })
   ;
 
   $html = $dictator->generate();

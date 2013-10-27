@@ -12,6 +12,7 @@ class Dictator {
   private $textFilelds = array();
   private $relations = array();
   private $manyRelations = array();
+  private $beforeCallbacks = array();
   private $searchs = array();
   private $options = array(
     'ipp' => '10',
@@ -77,6 +78,12 @@ class Dictator {
     return $this;
   }
 
+  public function onBeforeSave( $field, $function ) {
+    $this->beforeCallbacks[$field] = $function;
+
+    return $this;
+  }
+
   public function addRelation( $name, $table, $field ) {
     $this->relations[$name] = array(
       'table' => $table,
@@ -105,12 +112,18 @@ class Dictator {
       : null;
 
     if ( isset($_REQUEST['save']) && $_REQUEST['save'] ) {
+      $itemData = $_REQUEST['item'];
+
+      foreach ( $this->beforeCallbacks as $field => $function ) {
+        $itemData[$field] = $function($itemData[$field]);
+      }
+
       if ( $id ) {
         $sql = "UPDATE `$this->table` SET ";
 
         $params = array();
         $sqlParams = array();
-        foreach ( $_REQUEST['item'] as $key => $value ) {
+        foreach ( $itemData as $key => $value ) {
           if ( !$value ) $value = null;
 
           $sqlParams[] = "`{$key}` = :$key";
@@ -128,7 +141,7 @@ class Dictator {
         $keys = array();
         $values = array();
         $params = array();
-        foreach ( $_REQUEST['item'] as $key => $value ) {
+        foreach ( $itemData as $key => $value ) {
           if ( !$value ) $value = null;
 
           $keys[] = $key;
