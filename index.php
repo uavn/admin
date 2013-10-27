@@ -60,7 +60,14 @@ $dictator
 
     return '—';
   })
-  ->addFilter('date', function( $text ) {
+  ->addFilter('createdAt', function( $text ) {
+    if ( $text ) {
+      return date( 'd.m.Y (H:i:s)', strtotime($text) );
+    }
+
+    return '—';
+  })
+  ->addFilter('updatedAt', function( $text ) {
     if ( $text ) {
       return date( 'd.m.Y (H:i:s)', strtotime($text) );
     }
