@@ -424,7 +424,7 @@ class Dictator {
         $classname = 'dictator-sort-' . strtolower($totype);
       }
 
-      $table .= '<th><p>' .
+      $table .= '<th class="col-head-' . $name . '"><p>' .
         '<a class="' . $classname . '" href="?sort=' . $name . '&type=' . $totype . '">' .
           $title .
         '</a>' .
@@ -458,7 +458,7 @@ class Dictator {
           $val = $this->filters[$name]($val);
         }
 
-        $table .= '<td><p>' . $val . '</p></td>';
+        $table .= '<td class="col-body-' . $name . '"><p>' . $val . '</p></td>';
       }
 
       foreach ( $this->manyRelations as $relation ) {
