@@ -124,7 +124,7 @@ class Dictator {
       : null;
 
     if ( isset($_REQUEST['save']) && $_REQUEST['save'] ) {
-      $itemData = $_REQUEST['item'];
+      $itemData = isset($_REQUEST['item']) ? $_REQUEST['item'] : array();
 
       if ( $id ) {
         foreach ( $this->beforeUpdates as $field => $function ) {
@@ -165,8 +165,12 @@ class Dictator {
           $params[$key] = $value;
         }
 
-        $sql .= '(`' . join('`, `', $keys) . '`) VALUES ';
-        $sql .= '(' . join(', ', $values) . ')';
+        if ( $keys ) {
+          $sql .= '(`' . join('`, `', $keys) . '`) VALUES ';
+          $sql .= '(' . join(', ', $values) . ')';
+        } else {
+          $sql .= ' VALUES ()';
+        }
 
         $statement = $this->conn->prepare($sql);
         $statement->execute($params);
