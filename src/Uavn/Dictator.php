@@ -13,7 +13,9 @@ class Dictator {
   private $relations = array();
   private $manyRelations = array();
   private $beforeInserts = array();
+  private $afterInserts = array();
   private $beforeUpdates = array();
+  private $afterUpdates = array();
   private $noEdit = array();
   private $searchs = array();
   private $options = array(
@@ -90,8 +92,14 @@ class Dictator {
     return $this;
   }
 
-  public function onBeforeUpdate( $field, $function ) {
-    $this->beforeUpdates[$field] = $function;
+  public function onAfterInsert( $field, $function ) {
+    $this->afterInserts[$field] = $function;
+
+    return $this;
+  }
+
+  public function onAfterUpdate( $field, $function ) {
+    $this->afterUpdates[$field] = $function;
 
     return $this;
   }
@@ -411,7 +419,7 @@ class Dictator {
 
     $statement = $this->conn->prepare("SELECT FOUND_ROWS();");
     $statement->execute();
-    $cnt = $statement->fetchColumn(); 
+    $cnt = $statement->fetchColumn();
 
     $table = '<table class="dictator">';
     $table .= '<tr>';
@@ -513,14 +521,14 @@ class Dictator {
       $value = isset($requestSearch[$search])
         ? $requestSearch[$search]
         : null;
-      
+
       $label = $this->fields[$search];
       $searchForm .= '<label>' . $label . ': <input name="search[' . $search . ']" type="text" value="' . $value . '" placeholder="' . $label . '"/></label>';
     }
     $searchForm .= '<input type="submit" value="' . $this->t('Search') . '"/>';
     $searchForm .= '</form>';
 
-    return 
+    return
       '<h1>' . $this->title . '</h1>' .
       $searchForm .
       '<form action="" method="POST" onsubmit="return confirm(\'' . $this->t('Sure?') . '\')">' .
