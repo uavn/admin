@@ -98,6 +98,12 @@ class Dictator {
     return $this;
   }
 
+  public function onBeforeUpdate( $field, $function ) {
+    $this->beforeUpdates[$field] = $function;
+
+    return $this;
+  }
+
   public function onAfterUpdate( $field, $function ) {
     $this->afterUpdates[$field] = $function;
 
