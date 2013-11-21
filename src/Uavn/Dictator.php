@@ -18,6 +18,7 @@ class Dictator {
   private $afterUpdates = array();
   private $noEdit = array();
   private $searchs = array();
+  private $sources = array();
   private $options = array(
     'ipp' => '10',
     'Actions' => 'Actions',
@@ -78,6 +79,10 @@ class Dictator {
     $this->filters[$name] = $filter;
 
     return $this;
+  }
+
+  public function addSource( $field, $source ) {
+    $this->sources[$field] = $source;
   }
 
   public function addSearch( $name ) {
@@ -274,7 +279,19 @@ class Dictator {
       }
 
       $form .= '<div class="dictator-row">';
-      if ( isset($this->relations[$name]) ) {
+      if ( isset($this->sources[$name]) ) {
+        $form .= '<label for="dictatod' . $name . '">' . $title . ':</label><br/>' .
+          '<select name="item[' . $name . ']" id="dictatod' . $name . '">';
+        $form .= '<option value=""> — </option>';
+        foreach ( $this->sources[$name] as $ki => $kv ) {
+          $selected = '';
+          if ( $value == $ki ) {
+            $selected = 'selected="selected"';
+          }
+          $form .= '<option ' . $selected . ' value="' . $ki .'">' . $kv . '</option>';
+        }
+        $form .= "</select>";
+      } elseif ( isset($this->relations[$name]) ) {
         $rel = $this->relations[$name];
         $sql = "SELECT * FROM `{$rel['table']}` ORDER BY `{$rel['field']}`";
 
@@ -461,7 +478,9 @@ class Dictator {
       foreach ( $this->fields as $name => $title ) {
         $val = $row->{$name};
 
-        if ( isset($this->relations[$name]) && $val ) {
+        if ( isset($this->sources[$name]) && $val ) {
+          $val = $this->sources[$name][$val];
+        } elseif ( isset($this->relations[$name]) && $val ) {
           $rel = $this->relations[$name];
 
           $sql = "SELECT * FROM `{$rel['table']}` WHERE `id` = {$val}";

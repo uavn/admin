@@ -12,7 +12,7 @@ $pdo = new \PDO(
 $dictator = new \Uavn\Dictator;
 $dictator
   ->setConnection($pdo)
-  
+
   ->setOptions(array(
     'Actions' => 'Действия',
     'Edit' => 'Редактировать',
@@ -36,6 +36,7 @@ $dictator
   ->addField('name', 'Название')
   ->addField('desc', 'Описание')
   ->addField('isSold', 'Продана?')
+  ->addField('status', 'Статус')
   // Third parameter — will not be showed on edit page
   ->addField('createdAt', 'Создано', false)
   ->addField('updatedAt', 'Обновлено', false)
@@ -82,7 +83,7 @@ $dictator
   ->addCheckWidget('isSold')
 
   ->addRelation('categoryId', 'category', 'name')
-  
+
   ->addManyToManyRelation(
     'author', 'name', 'Авторы',
     'author_book', 'bookId', 'authorId'
@@ -102,10 +103,20 @@ $dictator
   ->onBeforeInsert('updatedAt', function() {
     return date('Y-m-d H:i:s');
   })
+  // ->onAfterInsert('updatedAt', function() {
+  // })
 
   ->onBeforeUpdate('updatedAt', function( $itemData ) {
     return date('Y-m-d H:i:s');
   })
+  // ->onAfterUpdate('updatedAt', function( $itemData ) {
+  // })
+
+  ->addSource('status', array(
+    1 => 'Статус 1',
+    2 => 'Статус 2',
+    3 => 'Статус 3',
+  ))
   ;
 
   $html = $dictator->generate();
@@ -215,7 +226,7 @@ $dictator
       border: 1px solid #aaa;
       padding: 5px;
     }
-    
+
     .dictator-search input[type=submit] {
       padding: 5px 15px;
       border: 1px solid #aaa;
