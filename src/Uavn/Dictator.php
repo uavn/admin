@@ -87,6 +87,8 @@ class Dictator {
 
   public function addSource( $field, $source ) {
     $this->sources[$field] = $source;
+    
+    return $this;
   }
 
   public function addSearch( $name ) {
