@@ -39,6 +39,10 @@ class Dictator {
 
     return $this;
   }
+  
+  public function getConnection() {
+    return $this->conn;
+  }
 
   public function setTable( $table, $title = null ) {
     $this->table = $table;
