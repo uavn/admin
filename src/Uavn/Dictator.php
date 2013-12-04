@@ -546,18 +546,22 @@ class Dictator {
         }
       }
     }
-
-    $searchForm = '<form class="dictator-search" action="" method="GET">';
-    foreach ( $this->searchs as $search ) {
-      $value = isset($requestSearch[$search])
-        ? $requestSearch[$search]
-        : null;
-
-      $label = $this->fields[$search];
-      $searchForm .= '<label>' . $label . ': <input name="search[' . $search . ']" type="text" value="' . $value . '" placeholder="' . $label . '"/></label>';
+  
+    if ( $this->searchs ) {
+      $searchForm = '<form class="dictator-search" action="" method="GET">';
+      foreach ( $this->searchs as $search ) {
+        $value = isset($requestSearch[$search])
+          ? $requestSearch[$search]
+          : null;
+  
+        $label = $this->fields[$search];
+        $searchForm .= '<label>' . $label . ': <input name="search[' . $search . ']" type="text" value="' . $value . '" placeholder="' . $label . '"/></label>';
+      }
+      $searchForm .= '<input type="submit" value="' . $this->t('Search') . '"/>';
+      $searchForm .= '</form>';
+    } else {
+      $searchForm = '';
     }
-    $searchForm .= '<input type="submit" value="' . $this->t('Search') . '"/>';
-    $searchForm .= '</form>';
 
     return
       '<h1>' . $this->title . '</h1>' .
