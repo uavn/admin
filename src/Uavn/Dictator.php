@@ -533,6 +533,12 @@ class Dictator {
         '<a href="?delete=' . $row->id . '" onclick="return confirm(\'' . $this->t('Sure?') . '\')">' . $this->t('Delete') . '</a>';
       if ( $this->additionalButtons ) {
         foreach ( $this->additionalButtons as $hhhref => $additionalButton ) {
+          if ( false !== strpos( $hhhref, '?' ) ) {
+            $hhhref .= "&id={$row->id}";
+          } else {
+            $hhhref .= "?id={$row->id}";
+          }
+          
           $table .= '<br/><a href="' .  $hhhref . '">' . $additionalButton . '</a>';
         }
       }
