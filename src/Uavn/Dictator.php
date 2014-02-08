@@ -19,6 +19,7 @@ class Dictator {
   private $noEdit = array();
   private $searchs = array();
   private $sources = array();
+  private $additionalButtons = array();
   private $options = array(
     'ipp' => '10',
     'Actions' => 'Actions',
@@ -79,6 +80,12 @@ class Dictator {
     return $this;
   }
 
+  public function addButton( $href, $label ) {
+    $this->additionalButtons[$href] = $label;
+
+    return $this;
+  }
+  
   public function addFilter( $name, $filter ) {
     $this->filters[$name] = $filter;
 
@@ -523,8 +530,13 @@ class Dictator {
 
       $table .= '<td><p>' .
         '<a href="?edit=' . $row->id . '">' . $this->t('Edit') . '</a> <br/>' .
-        '<a href="?delete=' . $row->id . '" onclick="return confirm(\'' . $this->t('Sure?') . '\')">' . $this->t('Delete') . '</a>' .
-      '</p></td>';
+        '<a href="?delete=' . $row->id . '" onclick="return confirm(\'' . $this->t('Sure?') . '\')">' . $this->t('Delete') . '</a>';
+      if ( $this->additionalButtons ) {
+        foreach ( additionalButtons as $hhhref, $additionalButton ) {
+          $table .= '<br/><a href="' .  $hhhref . '">' . $additionalButton . '</a>';
+        }
+      }
+      $table .= '</p></td>';
 
       $table .= '</tr>';
     }
