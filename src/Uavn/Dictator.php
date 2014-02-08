@@ -532,7 +532,7 @@ class Dictator {
         '<a href="?edit=' . $row->id . '">' . $this->t('Edit') . '</a> <br/>' .
         '<a href="?delete=' . $row->id . '" onclick="return confirm(\'' . $this->t('Sure?') . '\')">' . $this->t('Delete') . '</a>';
       if ( $this->additionalButtons ) {
-        foreach ( additionalButtons as $hhhref, $additionalButton ) {
+        foreach ( additionalButtons as $hhhref => $additionalButton ) {
           $table .= '<br/><a href="' .  $hhhref . '">' . $additionalButton . '</a>';
         }
       }
