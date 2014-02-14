@@ -474,7 +474,7 @@ class Dictator {
     $statement->execute();
     $cnt = $statement->fetchColumn();
 
-    $table = '<table class="dictator table table-striped">';
+    $table = '<table class="dictator table table-striped dictator-table-'. $this->table.'">';
     $table .= '<tr>';
     $table .= '<th><p><input class="form-control" type="checkbox" value="1"/></p></th>';
 
