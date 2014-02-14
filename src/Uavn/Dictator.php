@@ -295,7 +295,7 @@ class Dictator {
     if ( isset($_REQUEST['saved']) ) {
       $form .= '<div class="dictator-saved">' . $this->t('Saved successful') . '</div>';
     }
-    $form .= '<form action="" method="POST" enctype="multipart/form-data">';
+    $form .= '<form class="dictator-form-'. $this->table.'"" action="" method="POST" enctype="multipart/form-data">';
 
     foreach ( $this->fields as $name => $title ) {
       // values from DB
