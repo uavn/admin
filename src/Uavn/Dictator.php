@@ -20,7 +20,7 @@ class Dictator {
   private $afterUpdates = array();
   // Deprecated
   
-  private $afterSave = array();
+  private $afterSave = null;
 
   private $noEdit = array();
   private $searchs = array();
@@ -271,7 +271,10 @@ class Dictator {
         }
       }
       
-      $this->afterSave();
+      $afterSave = $this->afterSave;
+      if ( $afterSave ) {
+        $afterSave();
+      }
       
       header("Location:?edit={$id}&saved=1");
       die;
