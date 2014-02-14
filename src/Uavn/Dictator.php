@@ -529,8 +529,8 @@ class Dictator {
       }
 
       $table .= '<td><p>' .
-        '<a href="?edit=' . $row->id . '">' . $this->t('Edit') . '</a> <br/>' .
-        '<a href="?delete=' . $row->id . '" onclick="return confirm(\'' . $this->t('Sure?') . '\')">' . $this->t('Delete') . '</a>';
+        '<a href="?edit=' . $row->id . '"><span class="glyphicon glyphicon-pencil"></span>' . $this->t('Edit') . '</a> <br/>' .
+        '<a href="?delete=' . $row->id . '" onclick="return confirm(\'' . $this->t('Sure?') . '\')"><span class="glyphicon glyphicon-remove"></span>' . $this->t('Delete') . '</a>';
       if ( $this->additionalButtons ) {
         foreach ( $this->additionalButtons as $hhhref => $additionalButton ) {
           if ( false !== strpos( $hhhref, '?' ) ) {
