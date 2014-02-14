@@ -586,7 +586,7 @@ class Dictator {
       $searchForm .
       '<form action="" method="POST" onsubmit="return confirm(\'' . $this->t('Sure?') . '\')">' .
         $table .
-        '<br/><input class="btn btn-success" type="submit" value="' . $this->t('Delete') . '"/>' .
+        '<br/><input class="btn btn-danger" type="submit" value="' . $this->t('Delete') . '"/>' .
         '&nbsp;&nbsp;<a href="?new=1">' . $this->t('New row') . '</a>' .
       '</form>'.
       '<div class="dictator-pager">' .
