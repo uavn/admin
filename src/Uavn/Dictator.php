@@ -134,7 +134,7 @@ class Dictator {
     return $this;
   }
   
-  public function afterSave( $function ) {
+  public function onAfterSave( $function ) {
     $this->afterSave = $function;
 
     return $this;
