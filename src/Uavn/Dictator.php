@@ -12,10 +12,16 @@ class Dictator {
   private $textFilelds = array();
   private $relations = array();
   private $manyRelations = array();
+  
+  // Deprecated
   private $beforeInserts = array();
   private $afterInserts = array();
   private $beforeUpdates = array();
   private $afterUpdates = array();
+  // Deprecated
+  
+  private $afterSave = array();
+
   private $noEdit = array();
   private $searchs = array();
   private $sources = array();
@@ -124,6 +130,12 @@ class Dictator {
 
   public function onAfterUpdate( $field, $function ) {
     $this->afterUpdates[$field] = $function;
+
+    return $this;
+  }
+  
+  public function afterSave( $function ) {
+    $this->afterSave = $function;
 
     return $this;
   }
@@ -258,7 +270,9 @@ class Dictator {
           }
         }
       }
-
+      
+      $this->afterSave();
+      
       header("Location:?edit={$id}&saved=1");
       die;
     }
