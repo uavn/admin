@@ -325,24 +325,24 @@ class Dictator {
         $form .= "</select>";
       } elseif ( isset($this->fileFilelds[$name]) ) {
         $form .= '<label for="dictatod' . $name . '">' . $title . ':</label><br/>';
-        $form .= '<input type="file" name="file[' . $name . ']" id="dictatod' . $name . '"/>';
+        $form .= '<input class="form-control" type="file" name="file[' . $name . ']" id="dictatod' . $name . '"/>';
 
         if ( $value ) {
-          $form .= '<input type="checkbox" name="fileremove[' . $name . ']" id="dictatodl' . $name . '"/>';
+          $form .= '<input class="form-control" type="checkbox" name="fileremove[' . $name . ']" id="dictatodl' . $name . '"/>';
           $form .= '<label for="dictatodl' . $name . '">Удалить изображение (' . $value . ')</label> ';
         }
 
       } elseif ( isset($this->checkFilelds[$name]) ) {
         $form .= '<label for="dictatod' . $name . '">';
         $form .= '<input type="hidden" name="item[' . $name . ']" value="0"/>';
-        $form .= '<input type="checkbox" ' . ( $value ? 'checked="checked"' : '' ) . ' name="item[' . $name . ']" value="1" id="dictatod' . $name . '"/>';
+        $form .= '<input class="form-control" type="checkbox" ' . ( $value ? 'checked="checked"' : '' ) . ' name="item[' . $name . ']" value="1" id="dictatod' . $name . '"/>';
         $form .= ($title . '</label><br/>');
       } elseif ( isset($this->textFilelds[$name]) ) {
         $form .= '<label for="dictatod' . $name . '">' . $title . ':</label><br/>' .
-          '<textarea name="item[' . $name . ']" id="dictatod' . $name . '">' . $value . '</textarea>';
+          '<textarea class="form-control" name="item[' . $name . ']" id="dictatod' . $name . '">' . $value . '</textarea>';
       } else {
         $form .= '<label for="dictatod' . $name . '">' . $title . ':</label><br/>' .
-          '<input type="text" name="item[' . $name . ']" id="dictatod' . $name . '" value="' . $value . '"/>';
+          '<input class="form-control" type="text" name="item[' . $name . ']" id="dictatod' . $name . '" value="' . $value . '"/>';
       }
       $form .= '</div>';
     }
@@ -373,7 +373,7 @@ class Dictator {
         }
 
         $form .= '<label>';
-        $form .= '<input type="checkbox" ' . $checked . ' name="relation[' . $relation['table'] . '][]" value="' . $related->id . '"/>';
+        $form .= '<input class="form-control" type="checkbox" ' . $checked . ' name="relation[' . $relation['table'] . '][]" value="' . $related->id . '"/>';
         $form .= $related->{$relation['externalName']};
         $form .= '</label><br/>';
       }
@@ -381,7 +381,7 @@ class Dictator {
       $form .= '</div></div>';
     }
 
-    $form .= '<input type="submit" name="save" value="' . $this->t('Save') . '"/>';
+    $form .= '<input class="btn btn-success" type="submit" name="save" value="' . $this->t('Save') . '"/>';
     $form .= '<a class="dictator-list-rows" href="?">' . $this->t('List rows') . '</a>';
     $form .= '</form>';
 
@@ -459,7 +459,7 @@ class Dictator {
 
     $table = '<table class="dictator table table-striped">';
     $table .= '<tr>';
-    $table .= '<th><p><input type="checkbox" value="1"/></p></th>';
+    $table .= '<th><p><input class="form-control" type="checkbox" value="1"/></p></th>';
 
     foreach ( $this->fields as $name => $title ) {
       $classname = '';
@@ -486,7 +486,7 @@ class Dictator {
 
     foreach ( $rows as $row ) {
       $table .= '<tr>';
-      $table .= '<td><p><input type="checkbox" name="delete[]" value="' . $row->id . '"/></p></td>';
+      $table .= '<td><p><input class="form-control" type="checkbox" name="delete[]" value="' . $row->id . '"/></p></td>';
 
       foreach ( $this->fields as $name => $title ) {
         $val = $row->{$name};
@@ -573,9 +573,9 @@ class Dictator {
           : null;
   
         $label = $this->fields[$search];
-        $searchForm .= '<label>' . $label . ': <input name="search[' . $search . ']" type="text" value="' . $value . '" placeholder="' . $label . '"/></label>';
+        $searchForm .= '<label>' . $label . ': <input class="form-control" name="search[' . $search . ']" type="text" value="' . $value . '" placeholder="' . $label . '"/></label>';
       }
-      $searchForm .= '<input type="submit" value="' . $this->t('Search') . '"/>';
+      $searchForm .= '<input class="btn btn-info" type="submit" value="' . $this->t('Search') . '"/>';
       $searchForm .= '</form>';
     } else {
       $searchForm = '';
@@ -586,7 +586,7 @@ class Dictator {
       $searchForm .
       '<form action="" method="POST" onsubmit="return confirm(\'' . $this->t('Sure?') . '\')">' .
         $table .
-        '<br/><input type="submit" value="' . $this->t('Delete') . '"/>' .
+        '<br/><input class="btn btn-success" type="submit" value="' . $this->t('Delete') . '"/>' .
         '&nbsp;&nbsp;<a href="?new=1">' . $this->t('New row') . '</a>' .
       '</form>'.
       '<div class="dictator-pager">' .
