@@ -294,7 +294,7 @@ class Dictator {
       $form .= '<div class="dictator-row">';
       if ( isset($this->sources[$name]) ) {
         $form .= '<label for="dictatod' . $name . '">' . $title . ':</label><br/>' .
-          '<select name="item[' . $name . ']" id="dictatod' . $name . '">';
+          '<select class="form-control" name="item[' . $name . ']" id="dictatod' . $name . '">';
         $form .= '<option value=""> — </option>';
         foreach ( $this->sources[$name] as $ki => $kv ) {
           $selected = '';
@@ -313,7 +313,7 @@ class Dictator {
         $related = $statement->fetchAll(\PDO::FETCH_OBJ);
 
         $form .= '<label for="dictatod' . $name . '">' . $title . ':</label><br/>' .
-          '<select name="item[' . $name . ']" id="dictatod' . $name . '">';
+          '<select class="form-control" name="item[' . $name . ']" id="dictatod' . $name . '">';
         $form .= '<option value=""> — </option>';
         foreach ( $related as $item ) {
           $selected = '';
