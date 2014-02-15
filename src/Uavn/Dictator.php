@@ -490,7 +490,10 @@ class Dictator {
 
     $table = '<table class="dictator table table-striped dictator-table-'. $this->table.'">';
     $table .= '<tr>';
-    $table .= '<th><p><input class="form-control" type="checkbox" value="1"/></p></th>';
+
+    if ( $this->getOption('allowDelete') ) {
+      $table .= '<th><p><input class="form-control" type="checkbox" value="1"/></p></th>';
+    }
 
     foreach ( $this->fields as $name => $title ) {
       $classname = '';
@@ -517,7 +520,9 @@ class Dictator {
 
     foreach ( $rows as $row ) {
       $table .= '<tr>';
-      $table .= '<td><p><input class="form-control" type="checkbox" name="delete[]" value="' . $row->id . '"/></p></td>';
+      if ( $this->getOption('allowDelete') ) {
+        $table .= '<td><p><input class="form-control" type="checkbox" name="delete[]" value="' . $row->id . '"/></p></td>';
+      }
 
       foreach ( $this->fields as $name => $title ) {
         $val = $row->{$name};
@@ -622,7 +627,9 @@ class Dictator {
       $searchForm .
       '<form action="" method="POST" onsubmit="return confirm(\'' . $this->t('Sure?') . '\')">' .
         $table .
-        '<br/><input class="btn btn-danger" type="submit" value="' . $this->t('Delete') . '"/>' .
+        ( $this->getOption('allowDelete')
+          ? '<br/><input class="btn btn-danger" type="submit" value="' . $this->t('Delete') . '"/>'
+          : '' ) .
         '&nbsp;&nbsp;<a href="?new=1">' . $this->t('New row') . '</a>' .
       '</form>'.
       '<div class="dictator-pager">' .
