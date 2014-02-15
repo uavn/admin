@@ -651,7 +651,7 @@ class Dictator {
     return $this;
   }
 
-  private function getOption( $key ) {
+  public function getOption( $key ) {
     return $this->options[$key];
   }
 
