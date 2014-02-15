@@ -29,6 +29,8 @@ class Dictator {
   private $options = array(
     'ipp' => '10',
     'dropDownLimit' => '100',
+    'allowEdit' => true,
+    'allowDelete' => true,
     'Actions' => 'Actions',
     'Edit' => 'Edit',
     'Delete' => 'Delete',
@@ -558,8 +560,13 @@ class Dictator {
       }
 
       $table .= '<td><p class="nowrap">' .
-        '<a href="?edit=' . $row->id . '"><span class="glyphicon glyphicon-pencil"></span> ' . $this->t('Edit') . '</a> <br/>' .
-        '<a href="?delete=' . $row->id . '" onclick="return confirm(\'' . $this->t('Sure?') . '\')"><span class="glyphicon glyphicon-remove"></span> ' . $this->t('Delete') . '</a>';
+        ($this->getOption('allowEdit')
+          ? '<a href="?edit=' . $row->id . '"><span class="glyphicon glyphicon-pencil"></span> ' . $this->t('Edit') . '</a> <br/>'
+          : '') .
+        ($this->getOption('allowDelete')
+          ? '<a href="?delete=' . $row->id . '" onclick="return confirm(\'' . $this->t('Sure?') . '\')"><span class="glyphicon glyphicon-remove"></span> ' . $this->t('Delete') . '</a>'
+          : '');
+
       if ( $this->additionalButtons ) {
         foreach ( $this->additionalButtons as $hhhref => $additionalButton ) {
           if ( false !== strpos( $hhhref, '?' ) ) {
