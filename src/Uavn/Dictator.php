@@ -12,14 +12,14 @@ class Dictator {
   private $textFilelds = array();
   private $relations = array();
   private $manyRelations = array();
-  
+
   // Deprecated
   private $beforeInserts = array();
   private $afterInserts = array();
   private $beforeUpdates = array();
   private $afterUpdates = array();
   // Deprecated
-  
+
   private $afterSave = null;
 
   private $noEdit = array();
@@ -27,8 +27,8 @@ class Dictator {
   private $sources = array();
   private $additionalButtons = array();
   private $options = array(
-    'dropDownLimit' => 100,
     'ipp' => '10',
+    'dropDownLimit' => '100',
     'Actions' => 'Actions',
     'Edit' => 'Edit',
     'Delete' => 'Delete',
@@ -47,7 +47,7 @@ class Dictator {
 
     return $this;
   }
-  
+
   public function getConnection() {
     return $this->conn;
   }
@@ -92,7 +92,7 @@ class Dictator {
 
     return $this;
   }
-  
+
   public function addFilter( $name, $filter ) {
     $this->filters[$name] = $filter;
 
@@ -101,7 +101,7 @@ class Dictator {
 
   public function addSource( $field, $source ) {
     $this->sources[$field] = $source;
-    
+
     return $this;
   }
 
@@ -134,7 +134,7 @@ class Dictator {
 
     return $this;
   }
-  
+
   public function onAfterSave( $function ) {
     $this->afterSave = $function;
 
@@ -271,12 +271,12 @@ class Dictator {
           }
         }
       }
-      
+
       $afterSave = $this->afterSave;
       if ( $afterSave ) {
         $afterSave();
       }
-      
+
       header("Location:?edit={$id}&saved=1");
       die;
     }
@@ -324,23 +324,34 @@ class Dictator {
         $form .= "</select>";
       } elseif ( isset($this->relations[$name]) ) {
         $rel = $this->relations[$name];
-        $sql = "SELECT * FROM `{$rel['table']}` ORDER BY `{$rel['field']}`";
 
+        $sql = "SELECT COUNT(*) as cnt FROM `{$rel['table']}` ORDER BY `{$rel['field']}`";
         $statement = $this->conn->prepare($sql);
         $statement->execute();
-        $related = $statement->fetchAll(\PDO::FETCH_OBJ);
+        $cntRes = $statement->fetchObject();
 
-        $form .= '<label for="dictatod' . $name . '">' . $title . ':</label><br/>' .
-          '<select class="form-control" name="item[' . $name . ']" id="dictatod' . $name . '">';
-        $form .= '<option value=""> — </option>';
-        foreach ( $related as $item ) {
-          $selected = '';
-          if ( $value == $item->id ) {
-            $selected = 'selected="selected"';
+        if ( $cntRes->cnt > $this->getOption('dropDownLimit') ) {
+          $form .= '<label for="dictatod' . $name . '">' . $title . ' (ID):</label><br/>' .
+          '<input class="form-control" type="text" name="item[' . $name . ']" id="dictatod' . $name . '" value="' . $value . '"/>';
+        } else {
+          $sql = "SELECT * FROM `{$rel['table']}` ORDER BY `{$rel['field']}`";
+
+          $statement = $this->conn->prepare($sql);
+          $statement->execute();
+          $related = $statement->fetchAll(\PDO::FETCH_OBJ);
+
+          $form .= '<label for="dictatod' . $name . '">' . $title . ':</label><br/>' .
+            '<select class="form-control" name="item[' . $name . ']" id="dictatod' . $name . '">';
+          $form .= '<option value=""> — </option>';
+          foreach ( $related as $item ) {
+            $selected = '';
+            if ( $value == $item->id ) {
+              $selected = 'selected="selected"';
+            }
+            $form .= '<option ' . $selected . ' value="' . $item->id .'">' . $item->{$rel['field']} . '</option>';
           }
-          $form .= '<option ' . $selected . ' value="' . $item->id .'">' . $item->{$rel['field']} . '</option>';
+          $form .= "</select>";
         }
-        $form .= "</select>";
       } elseif ( isset($this->fileFilelds[$name]) ) {
         $form .= '<label for="dictatod' . $name . '">' . $title . ':</label><br/>';
         $form .= '<input class="form-control" type="file" name="file[' . $name . ']" id="dictatod' . $name . '"/>';
@@ -556,7 +567,7 @@ class Dictator {
           } else {
             $hhhref .= "?id={$row->id}";
           }
-          
+
           $table .= '<br/><a href="' .  $hhhref . '">' . $additionalButton . '</a>';
         }
       }
@@ -582,14 +593,14 @@ class Dictator {
         }
       }
     }
-  
+
     if ( $this->searchs ) {
       $searchForm = '<form class="dictator-search" action="" method="GET">';
       foreach ( $this->searchs as $search ) {
         $value = isset($requestSearch[$search])
           ? $requestSearch[$search]
           : null;
-  
+
         $label = $this->fields[$search];
         $searchForm .= '<label>' . $label . ': <input class="form-control" name="search[' . $search . ']" type="text" value="' . $value . '" placeholder="' . $label . '"/></label>';
       }
