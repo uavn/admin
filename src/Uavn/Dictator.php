@@ -27,6 +27,7 @@ class Dictator {
   private $sources = array();
   private $additionalButtons = array();
   private $options = array(
+    'dropDownLimit' => 100,
     'ipp' => '10',
     'Actions' => 'Actions',
     'Edit' => 'Edit',
