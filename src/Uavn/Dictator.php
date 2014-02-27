@@ -153,7 +153,11 @@ class Dictator {
     return $this;
   }
 
-  public function addManyToManyRelation( $table, $externalName, $title, $relationTable, $internalField, $externalField ) {
+  public function addManyToManyRelation(
+    $table, $externalName, $title,
+    $relationTable, $internalField, $externalField,
+    $hideEmpty = false
+  ) {
     $this->manyRelations[] = array(
       'table' => $table,
       'externalName' => $externalName,
@@ -161,6 +165,7 @@ class Dictator {
       'relationTable' => $relationTable,
       'internalField' => $internalField,
       'externalField' => $externalField,
+      'hideEmpty' => $hideEmpty
     );
 
     return $this;
@@ -401,15 +406,17 @@ class Dictator {
       $related = $statement->fetchAll(\PDO::FETCH_OBJ);
 
       foreach ( $related as $related ) {
-        $checked = '';
-        if ( in_array($related->id, $relatedIds) ) {
-          $checked = 'checked="checked"';
-        }
+        if ( !$relation['hideEmpty'] || $related->{$relation['externalName']} ) {
+          $checked = '';
+          if ( in_array($related->id, $relatedIds) ) {
+            $checked = 'checked="checked"';
+          }
 
-        $form .= '<label>';
-        $form .= '<input class="form-control" type="checkbox" ' . $checked . ' name="relation[' . $relation['table'] . '][]" value="' . $related->id . '"/>';
-        $form .= $related->{$relation['externalName']};
-        $form .= '</label><br/>';
+          $form .= '<label>';
+          $form .= '<input class="form-control" type="checkbox" ' . $checked . ' name="relation[' . $relation['table'] . '][]" value="' . $related->id . '"/> ';
+          $form .= $related->{$relation['externalName']};
+          $form .= '</label><br/>';
+        }
       }
 
       $form .= '</div></div>';
