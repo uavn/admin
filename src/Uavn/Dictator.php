@@ -143,10 +143,11 @@ class Dictator {
     return $this;
   }
 
-  public function addRelation( $name, $table, $field ) {
+  public function addRelation( $name, $table, $field, $hideEmpty = false ) {
     $this->relations[$name] = array(
       'table' => $table,
       'field' => $field,
+      'hideEmpty' => $hideEmpty
     );
 
     return $this;
@@ -346,11 +347,13 @@ class Dictator {
             '<select class="form-control" name="item[' . $name . ']" id="dictatod' . $name . '">';
           $form .= '<option value=""> — </option>';
           foreach ( $related as $item ) {
-            $selected = '';
-            if ( $value == $item->id ) {
-              $selected = 'selected="selected"';
+            if ( !$rel['hideEmpty'] || $item->{$rel['field']} ) {
+              $selected = '';
+              if ( $value == $item->id ) {
+                $selected = 'selected="selected"';
+              }
+              $form .= '<option ' . $selected . ' value="' . $item->id .'">' . $item->{$rel['field']} . '</option>';
             }
-            $form .= '<option ' . $selected . ' value="' . $item->id .'">' . $item->{$rel['field']} . '</option>';
           }
           $form .= "</select>";
         }
