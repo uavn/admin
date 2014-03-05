@@ -143,12 +143,11 @@ class Dictator {
     return $this;
   }
 
-  public function addRelation( $name, $table, $field, $hideEmpty = false, $additionalCondition = '' ) {
+  public function addRelation( $name, $table, $field, $hideEmpty = false ) {
     $this->relations[$name] = array(
       'table' => $table,
       'field' => $field,
-      'hideEmpty' => $hideEmpty,
-      'additionalCondition' => $additionalCondition
+      'hideEmpty' => $hideEmpty
     );
 
     return $this;
@@ -334,12 +333,7 @@ class Dictator {
       } elseif ( isset($this->relations[$name]) ) {
         $rel = $this->relations[$name];
 
-        $where = '1';
-        if ( $rel['additionalCondition'] ) {
-          $where = $rel['additionalCondition'];
-        }
-
-        $sql = "SELECT COUNT(*) as cnt FROM `{$rel['table']}` WHERE {$where} ORDER BY `{$rel['field']}`";
+        $sql = "SELECT COUNT(*) as cnt FROM `{$rel['table']}` ORDER BY `{$rel['field']}`";
         $statement = $this->conn->prepare($sql);
         $statement->execute();
         $cntRes = $statement->fetchObject();
@@ -348,7 +342,7 @@ class Dictator {
           $form .= '<label for="dictatod' . $name . '">' . $title . ' (ID):</label><br/>' .
           '<input class="form-control" type="text" name="item[' . $name . ']" id="dictatod' . $name . '" value="' . $value . '"/>';
         } else {
-          $sql = "SELECT * FROM `{$rel['table']}` WHERE {$where} ORDER BY `{$rel['field']}`";
+          $sql = "SELECT * FROM `{$rel['table']}` ORDER BY `{$rel['field']}`";
 
           $statement = $this->conn->prepare($sql);
           $statement->execute();
@@ -490,7 +484,9 @@ class Dictator {
 
     $where = array('1');
     foreach ( $requestSearch as $key => $value) {
-      $where[] = "`{$key}` LIKE '%{$value}%'";
+      if ( $value ) {
+        $where[] = "`{$key}` LIKE '%{$value}%'";
+      }
     }
     $where = join(' AND ', $where);
 
