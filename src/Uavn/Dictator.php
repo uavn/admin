@@ -4,6 +4,7 @@ namespace Uavn;
 class Dictator {
   private $conn = null;
   private $table = null;
+  private $where = null;
   private $title = null;
   private $fields = array();
   private $filters = array();
@@ -58,6 +59,12 @@ class Dictator {
   public function setTable( $table, $title = null ) {
     $this->table = $table;
     $this->title = $title ?: $table;
+
+    return $this;
+  }
+
+  public function setWhere( $where ) {
+    $this->where = $where;
 
     return $this;
   }
@@ -492,6 +499,9 @@ class Dictator {
     $limit = "{$offset}, {$ipp}";
 
     $where = array('1');
+    if ( $this->where ) {
+      $where[] = $this->where;
+    }
     foreach ( $requestSearch as $key => $value) {
       $where[] = "`{$key}` LIKE '%{$value}%'";
     }
