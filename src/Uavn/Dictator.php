@@ -502,8 +502,10 @@ class Dictator {
     if ( $this->where ) {
       $where[] = $this->where;
     }
-    foreach ( $requestSearch as $key => $value) {
-      $where[] = "`{$key}` LIKE '%{$value}%'";
+    foreach ( $requestSearch as $key => $value ) {
+      if ( $value ) {
+        $where[] = "`{$key}` LIKE '%{$value}%'";
+      }
     }
     $where = join(' AND ', $where);
 
