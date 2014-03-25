@@ -4,7 +4,6 @@ namespace Uavn;
 class Dictator {
   private $conn = null;
   private $table = null;
-  private $where = null;
   private $title = null;
   private $fields = array();
   private $filters = array();
@@ -32,7 +31,6 @@ class Dictator {
     'dropDownLimit' => '100',
     'allowEdit' => true,
     'allowDelete' => true,
-    'queryString' => '',
     'Actions' => 'Actions',
     'Edit' => 'Edit',
     'Delete' => 'Delete',
@@ -59,12 +57,6 @@ class Dictator {
   public function setTable( $table, $title = null ) {
     $this->table = $table;
     $this->title = $title ?: $table;
-
-    return $this;
-  }
-
-  public function setWhere( $where ) {
-    $this->where = $where;
 
     return $this;
   }
@@ -151,12 +143,11 @@ class Dictator {
     return $this;
   }
 
-  public function addRelation( $name, $table, $field, $hideEmpty = false, $additionalCondition = '' ) {
+  public function addRelation( $name, $table, $field, $hideEmpty = false ) {
     $this->relations[$name] = array(
       'table' => $table,
       'field' => $field,
-      'hideEmpty' => $hideEmpty,
-      'additionalCondition' => $additionalCondition
+      'hideEmpty' => $hideEmpty
     );
 
     return $this;
@@ -200,8 +191,8 @@ class Dictator {
         foreach ( $itemData as $key => $value ) {
           if ( !$value ) $value = null;
 
-          $sqlParams[] = "`{$key}` = ?";
-          $params[] = $value;
+          $sqlParams[] = "`{$key}` = :$key";
+          $params[$key] = $value;
         }
         $sql .= join(', ', $sqlParams);
 
@@ -223,8 +214,8 @@ class Dictator {
           if ( !$value ) $value = null;
 
           $keys[] = $key;
-          $values[] = "?";
-          $params[] = $value;
+          $values[] = ":{$key}";
+          $params[$key] = $value;
         }
 
         if ( $keys ) {
@@ -233,13 +224,11 @@ class Dictator {
         } else {
           $sql .= ' VALUES ()';
         }
-// echo $sql;
-// print_r($params);
-// die;
+
         $statement = $this->conn->prepare($sql);
         $statement->execute($params);
-// die;
-        $id = $this->conn->lastInsertId();
+
+        $id = $this->conn->lastinsertId();
       }
 
       if ( isset($_FILES['file']['tmp_name']) ) {
@@ -293,10 +282,10 @@ class Dictator {
 
       $afterSave = $this->afterSave;
       if ( $afterSave ) {
-        $afterSave();
+        $afterSave( $id );
       }
 
-      header("Location:?edit={$id}&saved=1&" . $this->getOption('queryString'));
+      header("Location:?edit={$id}&saved=1");
       die;
     }
 
@@ -344,12 +333,7 @@ class Dictator {
       } elseif ( isset($this->relations[$name]) ) {
         $rel = $this->relations[$name];
 
-        $where = '1';
-        if ( $rel['additionalCondition'] ) {
-          $where = $rel['additionalCondition'];
-        }
-
-        $sql = "SELECT COUNT(*) as cnt FROM `{$rel['table']}` WHERE {$where} ORDER BY `{$rel['field']}`";
+        $sql = "SELECT COUNT(*) as cnt FROM `{$rel['table']}` ORDER BY `{$rel['field']}`";
         $statement = $this->conn->prepare($sql);
         $statement->execute();
         $cntRes = $statement->fetchObject();
@@ -358,7 +342,7 @@ class Dictator {
           $form .= '<label for="dictatod' . $name . '">' . $title . ' (ID):</label><br/>' .
           '<input class="form-control" type="text" name="item[' . $name . ']" id="dictatod' . $name . '" value="' . $value . '"/>';
         } else {
-          $sql = "SELECT * FROM `{$rel['table']}` WHERE {$where} ORDER BY `{$rel['field']}`";
+          $sql = "SELECT * FROM `{$rel['table']}` ORDER BY `{$rel['field']}`";
 
           $statement = $this->conn->prepare($sql);
           $statement->execute();
@@ -439,7 +423,7 @@ class Dictator {
     }
 
     $form .= '<input class="btn btn-success" type="submit" name="save" value="' . $this->t('Save') . '"/>';
-    $form .= '<a class="dictator-list-rows" href="?&' . $this->getOption('queryString') . '">' . $this->t('List rows') . '</a>';
+    $form .= '<a class="dictator-list-rows" href="?">' . $this->t('List rows') . '</a>';
     $form .= '</form>';
 
     return $form;
@@ -499,10 +483,7 @@ class Dictator {
     $limit = "{$offset}, {$ipp}";
 
     $where = array('1');
-    if ( $this->where ) {
-      $where[] = $this->where;
-    }
-    foreach ( $requestSearch as $key => $value ) {
+    foreach ( $requestSearch as $key => $value) {
       if ( $value ) {
         $where[] = "`{$key}` LIKE '%{$value}%'";
       }
@@ -597,7 +578,7 @@ class Dictator {
 
       $table .= '<td><p class="nowrap">' .
         ($this->getOption('allowEdit')
-          ? '<a href="?edit=' . $row->id . '&' . $this->getOption('queryString') . '"><span class="glyphicon glyphicon-pencil"></span> ' . $this->t('Edit') . '</a> <br/>'
+          ? '<a href="?edit=' . $row->id . '"><span class="glyphicon glyphicon-pencil"></span> ' . $this->t('Edit') . '</a> <br/>'
           : '') .
         ($this->getOption('allowDelete')
           ? '<a href="?delete=' . $row->id . '" onclick="return confirm(\'' . $this->t('Sure?') . '\')"><span class="glyphicon glyphicon-remove"></span> ' . $this->t('Delete') . '</a>'
@@ -654,14 +635,14 @@ class Dictator {
     }
 
     return
-      '<h1>' . $this->title . ' <a class="new" href="?new=1&' . $this->getOption('queryString') . '">' . $this->t('New row') . '</a></h1>' .
+      '<h1>' . $this->title . ' <a class="new" href="?new=1">' . $this->t('New row') . '</a></h1>' .
       $searchForm .
       '<form action="" method="POST" onsubmit="return confirm(\'' . $this->t('Sure?') . '\')">' .
         $table .
         ( $this->getOption('allowDelete')
           ? '<br/><input class="btn btn-danger" type="submit" value="' . $this->t('Delete') . '"/>'
           : '' ) .
-        '&nbsp;&nbsp;<a href="?new=1&' . $this->getOption('queryString') . '">' . $this->t('New row') . '</a>' .
+        '&nbsp;&nbsp;<a href="?new=1">' . $this->t('New row') . '</a>' .
       '</form>'.
       '<div class="dictator-pager">' .
         $pager .
