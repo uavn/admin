@@ -101,8 +101,11 @@ class Dictator {
     return $this;
   }
 
-  public function addSource( $field, $source ) {
-    $this->sources[$field] = $source;
+  public function addSource( $field, $source, $multi = false ) {
+    $this->sources[$field] = array(
+      'source' => $source,
+      'multi' => $multi,
+    );
 
     return $this;
   }
@@ -192,7 +195,7 @@ class Dictator {
           if ( !$value ) $value = null;
 
           $sqlParams[] = "`{$key}` = :$key";
-          $params[$key] = $value;
+          $params[$key] = is_array($value) ? join(',', $value) : $value;
         }
         $sql .= join(', ', $sqlParams);
 
@@ -319,17 +322,37 @@ class Dictator {
 
       $form .= '<div class="dictator-row">';
       if ( isset($this->sources[$name]) ) {
-        $form .= '<label for="dictatod' . $name . '">' . $title . ':</label><br/>' .
-          '<select class="form-control" name="item[' . $name . ']" id="dictatod' . $name . '">';
-        $form .= '<option value=""> — </option>';
-        foreach ( $this->sources[$name] as $ki => $kv ) {
-          $selected = '';
-          if ( $value == $ki ) {
-            $selected = 'selected="selected"';
+        if ( $this->sources[$name]['multi'] ) {
+          $form .= '<div class="dictator-row"><div>' . $title . '</div>:<br/><div class="dictator-row-m2m dictator-sources-multi">';
+
+          $inValues = explode(',', $value);
+
+          foreach ( $this->sources[$name]['source'] as $ki => $kv ) {
+            $checked = '';
+            if ( in_array($ki, $inValues) ) {
+              $checked = 'checked="checked"';
+            }
+
+            $form .= '<label>';
+            $form .= '<input class="form-control" type="checkbox" ' . $checked . ' name="item[' . $name . '][]" value="' . $ki . '"/> ';
+            $form .= $kv;
+            $form .= '</label><br/>';
           }
-          $form .= '<option ' . $selected . ' value="' . $ki .'">' . $kv . '</option>';
+
+          $form .= '</div></div>';
+        } else {
+          $form .= '<label for="dictatod' . $name . '">' . $title . ':</label><br/>' .
+            '<select class="form-control" name="item[' . $name . ']" id="dictatod' . $name . '">';
+          $form .= '<option value=""> — </option>';
+          foreach ( $this->sources[$name]['source'] as $ki => $kv ) {
+            $selected = '';
+            if ( $value == $ki ) {
+              $selected = 'selected="selected"';
+            }
+            $form .= '<option ' . $selected . ' value="' . $ki .'">' . $kv . '</option>';
+          }
+          $form .= "</select>";
         }
-        $form .= "</select>";
       } elseif ( isset($this->relations[$name]) ) {
         $rel = $this->relations[$name];
 
@@ -540,7 +563,20 @@ class Dictator {
         $val = $row->{$name};
 
         if ( isset($this->sources[$name]) && $val ) {
-          $val = $this->sources[$name][$val];
+          if ( $this->sources[$name]['multi'] ) {
+            $svals = array();
+            $dbvals = explode(',', $val);
+
+            foreach ( $this->sources[$name]['source'] as $sk => $sv ) {
+              if ( in_array($sk, $dbvals) ) {
+                $svals[] = $sv;
+              }
+            }
+
+            $val = join(', ', $svals);
+          } else {
+            $val = $this->sources[$name]['source'][$val];
+          }
         } elseif ( isset($this->relations[$name]) && $val ) {
           $rel = $this->relations[$name];
 
