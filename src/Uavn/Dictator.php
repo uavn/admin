@@ -303,7 +303,7 @@ class Dictator {
       $data = $statement->fetchObject();
     }
 
-    $form = '<h1>' . $this->title . ' (' . ( $id ? $this->t('Edit row') : $this->t('New row') ) . ')</h1>';
+    $form = '<h1>' . $this->title . ' (' . ( $id ? $this->t('Edit row') : $this->t('New row') ) . ') <a class="new" href="?new=1">' . $this->t('New row') . '</a></h1>';
     if ( isset($_REQUEST['saved']) ) {
       $form .= '<div class="dictator-saved">' . $this->t('Saved successful') . '</div>';
     }
