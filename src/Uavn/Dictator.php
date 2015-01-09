@@ -28,7 +28,7 @@ class Dictator {
   private $additionalButtons = array();
   private $options = array(
     'ipp' => '10',
-    'dropDownLimit' => '100',
+    'dropDownLimit' => '300',
     'allowEdit' => true,
     'allowDelete' => true,
     'Actions' => 'Actions',
@@ -661,8 +661,42 @@ class Dictator {
           ? $requestSearch[$search]
           : null;
 
-        $label = $this->fields[$search];
-        $searchForm .= '<label>' . $label . ': <input class="form-control" name="search[' . $search . ']" type="text" value="' . $value . '" placeholder="' . $label . '"/></label>';
+        if ( isset($this->relations[$search]) ) {
+          $rel = $this->relations[$search];
+
+          $sql = "SELECT COUNT(*) as cnt FROM `{$rel['table']}` ORDER BY `{$rel['field']}`";
+          $statement = $this->conn->prepare($sql);
+          $statement->execute();
+          $cntRes = $statement->fetchObject();
+
+          if ( $cntRes->cnt > $this->getOption('dropDownLimit') ) {
+            $searchForm .= '<label>' . $title . ' (ID):' .
+              '<input class="form-control" type="text" name="search[' . $search . ']" value="' . $value . '"/></label>';
+          } else {
+            $sql = "SELECT * FROM `{$rel['table']}` ORDER BY `{$rel['field']}`";
+
+            $statement = $this->conn->prepare($sql);
+            $statement->execute();
+            $related = $statement->fetchAll(\PDO::FETCH_OBJ);
+
+            $searchForm .= '<label>' . $this->fields[$search] . ':' .
+              '<select class="form-control" name="search[' . $search . ']">';
+            $searchForm .= '<option value=""> — </option>';
+            foreach ( $related as $item ) {
+              if ( !$rel['hideEmpty'] || $item->{$rel['field']} ) {
+                $selected = '';
+                if ( $value == $item->id ) {
+                  $selected = 'selected="selected"';
+                }
+                $searchForm .= '<option ' . $selected . ' value="' . $item->id .'">' . $item->{$rel['field']} . '</option>';
+              }
+            }
+            $searchForm .= "</select></label>";
+          }
+        } else {
+          $label = $this->fields[$search];
+          $searchForm .= '<label>' . $label . ': <input class="form-control" name="search[' . $search . ']" type="text" value="' . $value . '" placeholder="' . $label . '"/></label>';
+        }
       }
       $searchForm .= '<input class="btn btn-info" type="submit" value="' . $this->t('Search') . '"/>';
       $searchForm .= '</form>';
