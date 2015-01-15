@@ -42,6 +42,7 @@ class Dictator {
     'Save' => 'Save',
     'List rows' => 'List rows',
     'Saved successful' => 'Saved successful',
+    'items' => 'items'
   );
 
   public function setConnection( \PDO $conn ) {
@@ -705,7 +706,7 @@ class Dictator {
     }
 
     return
-      '<h1>' . $this->title . ' <a class="new" href="?new=1">' . $this->t('New row') . '</a></h1>' .
+      '<h1>' . $this->title . ' (' . $cnt . ' ' . $this->t('items') . ')' . ' <a class="new" href="?new=1">' . $this->t('New row') . '</a></h1>' .
       $searchForm .
       '<form action="" method="POST" onsubmit="return confirm(\'' . $this->t('Sure?') . '\')">' .
         $table .
