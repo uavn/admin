@@ -308,6 +308,9 @@ class Dictator {
     if ( isset($_REQUEST['saved']) ) {
       $form .= '<div class="dictator-saved">' . $this->t('Saved successful') . '</div>';
     }
+    
+    $form .= '<input class="btn btn-success" type="submit" name="save" value="' . $this->t('Save') . '"/>';
+    
     $form .= '<form class="dictator-form-'. $this->table.'"" action="" method="POST" enctype="multipart/form-data">';
 
     foreach ( $this->fields as $name => $title ) {
