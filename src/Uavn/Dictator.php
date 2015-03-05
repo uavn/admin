@@ -304,15 +304,14 @@ class Dictator {
       $data = $statement->fetchObject();
     }
 
-    $form = '<h1>' . $this->title . ' (' . ( $id ? $this->t('Edit row') : $this->t('New row') ) . ') <a class="new" href="?new=1">' . $this->t('New row') . '</a></h1>';
+    $form = '<h1>' . $this->title . ' (' . ( $id ? $this->t('Edit row') : $this->t('New row') ) . ') <a class="new" href="?new=1">' . $this->t('New row') . '</a>' . '<a class="dictator-list-rows" href="?">' . $this->t('List rows') . '</a>' . '</h1>';
     if ( isset($_REQUEST['saved']) ) {
       $form .= '<div class="dictator-saved">' . $this->t('Saved successful') . '</div>';
     }
     
+    $form .= '<form class="dictator-form-'. $this->table.'"" action="" method="POST" enctype="multipart/form-data">';
     $form .= '<input class="btn btn-success" type="submit" name="save" value="' . $this->t('Save') . '"/>';
     
-    $form .= '<form class="dictator-form-'. $this->table.'"" action="" method="POST" enctype="multipart/form-data">';
-
     foreach ( $this->fields as $name => $title ) {
       // values from DB
       if ( 'id' == $name || in_array($name, $this->noEdit) ) {
