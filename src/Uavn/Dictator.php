@@ -21,6 +21,7 @@ class Dictator {
   // Deprecated
 
   private $afterSave = null;
+  private $beforeSave = null;
 
   private $noEdit = array();
   private $searchs = array();
@@ -147,6 +148,12 @@ class Dictator {
     return $this;
   }
 
+  public function onBeforeSave( $function ) {
+    $this->beforeSave = $function;
+
+    return $this;
+  }
+
   public function addRelation( $name, $table, $field, $hideEmpty = false ) {
     $this->relations[$name] = array(
       'table' => $table,
@@ -181,6 +188,11 @@ class Dictator {
       : null;
 
     if ( isset($_REQUEST['save']) && $_REQUEST['save'] ) {
+      $beforeSave = $this->beforeSave;
+      if ( $beforeSave ) {
+        $beforeSave( $id );
+      }
+
       $itemData = isset($_REQUEST['item']) ? $_REQUEST['item'] : array();
 
       if ( $id ) {
@@ -308,10 +320,10 @@ class Dictator {
     if ( isset($_REQUEST['saved']) ) {
       $form .= '<div class="dictator-saved">' . $this->t('Saved successful') . '</div>';
     }
-    
+
     $form .= '<form class="dictator-form-'. $this->table.'"" action="" method="POST" enctype="multipart/form-data">';
     $form .= '<input class="btn btn-success" type="submit" name="save" value="' . $this->t('Save') . '"/>';
-    
+
     foreach ( $this->fields as $name => $title ) {
       // values from DB
       if ( 'id' == $name || in_array($name, $this->noEdit) ) {
