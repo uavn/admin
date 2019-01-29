@@ -1,4 +1,4 @@
-Dictator — open source admin generator for any PHP 5.3 project.
+Open source admin generator for any PHP 5.3 project.
 ========
 
 * Work with PDO, you can set your current project connection or create new one;
